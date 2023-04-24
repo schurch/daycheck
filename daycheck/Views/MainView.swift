@@ -6,12 +6,12 @@
 //
 
 import SwiftUI
-import HealthKit
 
 struct MainView: View {
     @State private var selectedValue: Rating.Value?
     @State private var showingNotificatonOptions = false
     @State private var showingEnableNotification = false
+    @State private var showingResults = false
     @State private var notificationButtonTitle: LocalizedStringKey = "Loading..."
     @State private var notificationState: NotificationState = .unknown
     
@@ -19,38 +19,48 @@ struct MainView: View {
     @Environment(\.openURL) private var openURL
     
     var body: some View {
-        VStack {
-            Spacer()
-            
-            VStack(alignment: .leading, spacing: 30) {
-                Text("How are you symptoms today?")
-                    .font(.title)
-                    .bold()
+        NavigationView {
+            VStack {
+                Spacer()
                 
-                VStack(spacing: 10) {
-                    ForEach(Rating.Value.allCases) { value in
-                        FeelingButton(value: value, selected: $selectedValue)
+                VStack(alignment: .leading, spacing: 30) {
+                    Text("How are you symptoms today?")
+                        .font(.title)
+                        .bold()
+                    
+                    VStack(spacing: 10) {
+                        ForEach(Rating.Value.allCases) { value in
+                            FeelingButton(value: value, selected: $selectedValue)
+                        }
                     }
                 }
-            }
-            .frame(maxWidth: 280)
-            
-            Spacer()
-            
-            Button(notificationButtonTitle) {
-                switch notificationState {
-                case .enabled:
-                    showingNotificatonOptions = true
-                case .disabled, .unknown:
-                    showingEnableNotification = true
-                case .unauthorized:
-                    openURL(URL(string:UIApplication.openSettingsURLString)!)
+                .frame(maxWidth: 280)
+                
+                Spacer()
+                
+                Button(notificationButtonTitle) {
+                    switch notificationState {
+                    case .enabled:
+                        showingNotificatonOptions = true
+                    case .disabled, .unknown:
+                        showingEnableNotification = true
+                    case .unauthorized:
+                        openURL(URL(string:UIApplication.openSettingsURLString)!)
+                    }
                 }
+                .font(.body)
+                .bold()
+                .foregroundColor(.accent)
+                .padding(.bottom, 20)
             }
-            .font(.body)
-            .bold()
-            .foregroundColor(.accent)
-            .padding(.bottom, 20)
+            .toolbar {
+                Button {
+                    showingResults = true
+                } label: {
+                    Image("graph")
+                }
+                .tint(.accent)
+            }
         }
         .confirmationDialog("", isPresented: $showingNotificatonOptions) {
             Button("Change time") {
@@ -73,6 +83,9 @@ struct MainView: View {
                 notificationState: $notificationState
             )
             .presentationDetents([.fraction(0.5)])
+        }
+        .sheet(isPresented: $showingResults) {
+            ResultsView(showingResults: $showingResults)
         }
         .onChange(of: selectedValue) { newValue in
             guard let newValue else { return }
@@ -129,7 +142,7 @@ private struct FeelingButton: View {
         .buttonStyle(
             MainButtonStyle(
                 selected: value == selected,
-                color: value.buttonColor
+                color: value.color
             )
         )
     }
@@ -171,18 +184,6 @@ private extension NotificationState {
             return Calendar.current.date(from: components)!
         } else {
             return nil
-        }
-    }
-}
-
-private extension Rating.Value {
-    var buttonColor: Color {
-        switch self {
-        case .notPresent: return .notPresent
-        case .present: return .notPresent
-        case .mild: return .mild
-        case .moderate: return .moderate
-        case .severe: return .severe
         }
     }
 }

@@ -13,6 +13,7 @@
 		F81212FF29F4E99B0099F756 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F81212FE29F4E99B0099F756 /* AppDelegate.swift */; };
 		F812130129F501A30099F756 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = F812130029F501A30099F756 /* Colors.swift */; };
 		F812130329F52A1B0099F756 /* EnableNotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F812130229F52A1B0099F756 /* EnableNotificationsView.swift */; };
+		F8E80B0529F74EF200707B61 /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E80B0429F74EF200707B61 /* ResultsView.swift */; };
 		F8EEDBAD29F392B1001233C8 /* daycheckApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EEDBAC29F392B1001233C8 /* daycheckApp.swift */; };
 		F8EEDBAF29F392B1001233C8 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EEDBAE29F392B1001233C8 /* MainView.swift */; };
 		F8EEDBB429F392B2001233C8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F8EEDBB329F392B2001233C8 /* Preview Assets.xcassets */; };
@@ -29,6 +30,7 @@
 		F812130229F52A1B0099F756 /* EnableNotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnableNotificationsView.swift; sourceTree = "<group>"; };
 		F850F83429F5368E00A99EAC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F855093D29F669AB00EDDD0D /* daycheck.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = daycheck.entitlements; sourceTree = "<group>"; };
+		F8E80B0429F74EF200707B61 /* ResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsView.swift; sourceTree = "<group>"; };
 		F8EEDBA929F392B1001233C8 /* daycheck.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = daycheck.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8EEDBAC29F392B1001233C8 /* daycheckApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = daycheckApp.swift; sourceTree = "<group>"; };
 		F8EEDBAE29F392B1001233C8 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -53,6 +55,7 @@
 			children = (
 				F8EEDBAE29F392B1001233C8 /* MainView.swift */,
 				F812130229F52A1B0099F756 /* EnableNotificationsView.swift */,
+				F8E80B0429F74EF200707B61 /* ResultsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -172,6 +175,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F81212FF29F4E99B0099F756 /* AppDelegate.swift in Sources */,
+				F8E80B0529F74EF200707B61 /* ResultsView.swift in Sources */,
 				F81212FB29F49D770099F756 /* Rating.swift in Sources */,
 				F8EEDBAF29F392B1001233C8 /* MainView.swift in Sources */,
 				F812130129F501A30099F756 /* Colors.swift in Sources */,
@@ -306,7 +310,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = daycheck/daycheck.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_ASSET_PATHS = "\"daycheck/Preview Content\"";
 				DEVELOPMENT_TEAM = L832SX5MC4;
 				ENABLE_PREVIEWS = YES;
@@ -338,7 +342,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = daycheck/daycheck.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_ASSET_PATHS = "\"daycheck/Preview Content\"";
 				DEVELOPMENT_TEAM = L832SX5MC4;
 				ENABLE_PREVIEWS = YES;
