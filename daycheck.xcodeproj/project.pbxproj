@@ -7,18 +7,34 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F81212F929F49D340099F756 /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F81212F829F49D340099F756 /* DataStore.swift */; };
+		F81212FB29F49D770099F756 /* Rating.swift in Sources */ = {isa = PBXBuildFile; fileRef = F81212FA29F49D770099F756 /* Rating.swift */; };
+		F81212FD29F4A36C0099F756 /* NotificationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F81212FC29F4A36C0099F756 /* NotificationHandler.swift */; };
+		F81212FF29F4E99B0099F756 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F81212FE29F4E99B0099F756 /* AppDelegate.swift */; };
+		F812130129F501A30099F756 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = F812130029F501A30099F756 /* Colors.swift */; };
+		F812130329F52A1B0099F756 /* EnableNotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F812130229F52A1B0099F756 /* EnableNotificationsView.swift */; };
 		F8EEDBAD29F392B1001233C8 /* daycheckApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EEDBAC29F392B1001233C8 /* daycheckApp.swift */; };
-		F8EEDBAF29F392B1001233C8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EEDBAE29F392B1001233C8 /* ContentView.swift */; };
-		F8EEDBB129F392B2001233C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F8EEDBB029F392B2001233C8 /* Assets.xcassets */; };
+		F8EEDBAF29F392B1001233C8 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EEDBAE29F392B1001233C8 /* MainView.swift */; };
 		F8EEDBB429F392B2001233C8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F8EEDBB329F392B2001233C8 /* Preview Assets.xcassets */; };
+		F8EEDBBD29F3ED3E001233C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F8EEDBBC29F3ED3E001233C8 /* Assets.xcassets */; };
+		F8EEDBBF29F3FC4E001233C8 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F8EEDBBE29F3FC4E001233C8 /* Colors.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F81212F829F49D340099F756 /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
+		F81212FA29F49D770099F756 /* Rating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rating.swift; sourceTree = "<group>"; };
+		F81212FC29F4A36C0099F756 /* NotificationHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationHandler.swift; sourceTree = "<group>"; };
+		F81212FE29F4E99B0099F756 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		F812130029F501A30099F756 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		F812130229F52A1B0099F756 /* EnableNotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnableNotificationsView.swift; sourceTree = "<group>"; };
+		F850F83429F5368E00A99EAC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		F855093D29F669AB00EDDD0D /* daycheck.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = daycheck.entitlements; sourceTree = "<group>"; };
 		F8EEDBA929F392B1001233C8 /* daycheck.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = daycheck.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8EEDBAC29F392B1001233C8 /* daycheckApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = daycheckApp.swift; sourceTree = "<group>"; };
-		F8EEDBAE29F392B1001233C8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		F8EEDBB029F392B2001233C8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F8EEDBAE29F392B1001233C8 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		F8EEDBB329F392B2001233C8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		F8EEDBBC29F3ED3E001233C8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F8EEDBBE29F3FC4E001233C8 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +48,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F812130429F52A520099F756 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				F8EEDBAE29F392B1001233C8 /* MainView.swift */,
+				F812130229F52A1B0099F756 /* EnableNotificationsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		F8EEDBA029F392B1001233C8 = {
 			isa = PBXGroup;
 			children = (
@@ -51,9 +76,17 @@
 		F8EEDBAB29F392B1001233C8 /* daycheck */ = {
 			isa = PBXGroup;
 			children = (
+				F855093D29F669AB00EDDD0D /* daycheck.entitlements */,
+				F850F83429F5368E00A99EAC /* Info.plist */,
 				F8EEDBAC29F392B1001233C8 /* daycheckApp.swift */,
-				F8EEDBAE29F392B1001233C8 /* ContentView.swift */,
-				F8EEDBB029F392B2001233C8 /* Assets.xcassets */,
+				F81212FE29F4E99B0099F756 /* AppDelegate.swift */,
+				F812130429F52A520099F756 /* Views */,
+				F81212F829F49D340099F756 /* DataStore.swift */,
+				F81212FA29F49D770099F756 /* Rating.swift */,
+				F81212FC29F4A36C0099F756 /* NotificationHandler.swift */,
+				F812130029F501A30099F756 /* Colors.swift */,
+				F8EEDBBC29F3ED3E001233C8 /* Assets.xcassets */,
+				F8EEDBBE29F3FC4E001233C8 /* Colors.xcassets */,
 				F8EEDBB229F392B2001233C8 /* Preview Content */,
 			);
 			path = daycheck;
@@ -125,8 +158,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F8EEDBBF29F3FC4E001233C8 /* Colors.xcassets in Resources */,
+				F8EEDBBD29F3ED3E001233C8 /* Assets.xcassets in Resources */,
 				F8EEDBB429F392B2001233C8 /* Preview Assets.xcassets in Resources */,
-				F8EEDBB129F392B2001233C8 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,7 +171,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F8EEDBAF29F392B1001233C8 /* ContentView.swift in Sources */,
+				F81212FF29F4E99B0099F756 /* AppDelegate.swift in Sources */,
+				F81212FB29F49D770099F756 /* Rating.swift in Sources */,
+				F8EEDBAF29F392B1001233C8 /* MainView.swift in Sources */,
+				F812130129F501A30099F756 /* Colors.swift in Sources */,
+				F812130329F52A1B0099F756 /* EnableNotificationsView.swift in Sources */,
+				F81212FD29F4A36C0099F756 /* NotificationHandler.swift in Sources */,
+				F81212F929F49D340099F756 /* DataStore.swift in Sources */,
 				F8EEDBAD29F392B1001233C8 /* daycheckApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -264,17 +304,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = daycheck/daycheck.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_ASSET_PATHS = "\"daycheck/Preview Content\"";
 				DEVELOPMENT_TEAM = L832SX5MC4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = daycheck/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -293,17 +336,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = daycheck/daycheck.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_ASSET_PATHS = "\"daycheck/Preview Content\"";
 				DEVELOPMENT_TEAM = L832SX5MC4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = daycheck/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
