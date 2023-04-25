@@ -16,21 +16,41 @@ struct ResultsView: View {
         NavigationView {
             List {
                 Section {
-                    VStack(alignment: .leading) {
-                        Text("Graph")
+                    VStack(alignment: .leading, spacing: 25) {
+                        let months = createYear(startDate: ratings.last?.date ?? Date())
+                        let startYear = Calendar.current.dateComponents([.year], from: months.first!).year!
+                        let endYear = Calendar.current.dateComponents([.year], from: months.last!).year!
+                        let areYearsSame = startYear == endYear
+                        
+                        let startMonthTitle = areYearsSame
+                        ? months.first!.formatted(.dateTime.month())
+                        : months.first!.formatted(.dateTime.month().year())
+                        
+                        let endMonthTitle = areYearsSame
+                        ? months.last!.formatted(.dateTime.month())
+                        : months.last!.formatted(.dateTime.month().year())
+                        
+                        Text("\(startMonthTitle) – \(endMonthTitle)")
                             .font(.title3)
                             .bold()
                             .listRowSeparator(.hidden)
                         
-                        Chart {
-                            ForEach(ratings.groupedByMonth, id: \.first!.id) { group in
-                                LineMark(
-                                    x: .value("Month", group.first!.date.formatted(.dateTime.month(.wide))),
-                                    y: .value("Total Count", group.count)
-                                )
-                            }
-                        }
-                        .frame(height: 200)
+                        YearChart(values:[
+                            (months[0], 1.2),
+                            (months[1], 1.5),
+                            (months[2], 1.8),
+                            (months[3], 2.4),
+                            (months[4], 2.1),
+                            (months[5], 3.4),
+                            (months[6], 1.3),
+//                            (months[7], 0),
+//                            (months[8], 0),
+//                            (months[9], 0),
+//                            (months[10], 0),
+//                            (months[11], 0)
+                        ],
+                        months: months)
+                        .frame(height: 150)
                     }
                     .listRowSeparator(.hidden)
                     .padding(.bottom, 20)
@@ -63,12 +83,91 @@ struct ResultsView: View {
             .listStyle(.plain)
             .navigationTitle("Overview")
             .toolbar {
-                Button("Done") {
-                    showingResults = false
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") {
+                        showingResults = false
+                    }
                 }
             }
             .accentColor(.accent)
         }
+    }
+}
+
+private struct YearChart: View {
+    let values: [(Date, Double)]
+    let months: [Date]
+    
+    var body: some View {
+        Chart {
+            ForEach(values, id: \.0) { (month, average) in
+                LineMark(
+                    x: .value("Month", month),
+                    y: .value("Average", average)
+                )
+                .interpolationMethod(.catmullRom)
+                .foregroundStyle(Color.graph)
+                .symbol {
+                    Circle()
+                        .fill(Color.graph)
+                        .frame(width: 5)
+                }
+                
+                AreaMark(
+                    x: .value("Month", month),
+                    y: .value("Average", average)
+                )
+                .interpolationMethod(.catmullRom)
+                .foregroundStyle(
+                    LinearGradient(
+                        gradient: Gradient (
+                            colors: [
+                                .graph.opacity(0.5),
+                                .graph.opacity(0.2),
+                                .graph.opacity(0.05),
+                            ]
+                        ),
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+            }
+        }
+        .chartYScale(domain: [0, Rating.Value.allCases.count - 1])
+        .chartYAxis {
+            AxisMarks(
+                position: .leading,
+                values: .automatic(desiredCount: 5)
+            ) { value in
+                let rating = Rating.Value.allCases[value.as(Int.self)!]
+                AxisValueLabel {
+                    Text(rating.rawValue)
+                }
+            }
+        }
+        .chartXScale(domain: [months.first!, months.last!])
+        .chartXAxis {
+            AxisMarks(values: .stride(by: .month)) { value in
+                AxisGridLine()
+                AxisValueLabel(
+                    format: .dateTime.month(.narrow),
+                    anchor: .top
+                )
+            }
+        }
+    }
+}
+
+// Dates represent the start of each month
+private func createYear(startDate: Date) -> [Date] {
+    //FIXME: This should be a year counting backward from latest record
+    
+    let calendar = Calendar.current
+    let components = calendar.dateComponents([.month, .year], from: startDate)
+    let start = calendar.date(from: components)!
+    
+    return (0 ..< calendar.monthSymbols.count).compactMap {
+        calendar.date(byAdding: .month, value: $0, to: start)
     }
 }
 

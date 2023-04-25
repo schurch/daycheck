@@ -15,4 +15,5 @@ extension Color {
     static let mild = Color("mildColor")
     static let moderate = Color("moderateColor")
     static let severe = Color("severeColor")
+    static let graph = Color("graphColor")
 }
