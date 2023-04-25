@@ -36,3 +36,14 @@ extension Rating.Value {
         }
     }
 }
+
+extension Array where Element == Rating {
+    var bucketByMonth: [Date: [Rating]] {
+        self.sorted(by: { $0.date < $1.date})
+            .reduce(into: [:]) { buckets, rating in
+                let components = Calendar.current.dateComponents([.month, .year], from: rating.date)
+                guard let bucket = Calendar.current.date(from: components) else { return }
+                buckets[bucket] = buckets[bucket] ?? [] + [rating]
+            }
+    }
+}
