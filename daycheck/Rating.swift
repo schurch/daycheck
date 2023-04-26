@@ -43,7 +43,7 @@ extension Array where Element == Rating {
             .reduce(into: [:]) { buckets, rating in
                 let components = Calendar.current.dateComponents([.month, .year], from: rating.date)
                 guard let bucket = Calendar.current.date(from: components) else { return }
-                buckets[bucket] = buckets[bucket] ?? [] + [rating]
+                buckets[bucket] = (buckets[bucket] ?? []) + [rating]
             }
     }
 }

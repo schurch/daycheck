@@ -35,22 +35,20 @@ struct ResultsView: View {
                             .bold()
                             .listRowSeparator(.hidden)
                         
-                        YearChart(values:[
-                            (months[0], 1.2),
-                            (months[1], 1.5),
-                            (months[2], 1.8),
-                            (months[3], 2.4),
-                            (months[4], 2.1),
-                            (months[5], 3.4),
-                            (months[6], 1.3),
-//                            (months[7], 0),
-//                            (months[8], 0),
-//                            (months[9], 0),
-//                            (months[10], 0),
-//                            (months[11], 0)
-                        ],
-                        months: months)
-                        .frame(height: 150)
+                        let buckets = ratings.bucketByMonth
+                        let values: [(Date, Double)] = months
+                            .compactMap({ month in
+                                if buckets[month] != nil {
+                                    let monthValues = ratings.map({ Double(Rating.Value.allCases.firstIndex(of: $0.value)!) })
+                                    let average = monthValues.reduce(0, +) / Double(monthValues.count)
+                                    return (month, average)
+                                } else {
+                                    return nil
+                                }
+                            })
+                        
+                        YearChart(values: values, months: months)
+                            .frame(height: 150)
                     }
                     .listRowSeparator(.hidden)
                     .padding(.bottom, 20)
@@ -175,6 +173,7 @@ private extension Array where Element == Rating {
     var groupedByMonth: [[Rating]] {
         self.bucketByMonth
             .values
-            .sorted(by: { $0.first!.date < $1.first!.date })
+            .sorted(by: { $0.first!.date > $1.first!.date })
+            .map({ $0.reversed() })
     }
 }
