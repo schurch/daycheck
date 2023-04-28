@@ -18,36 +18,20 @@ struct ResultsView: View {
                 Section {
                     VStack(alignment: .leading, spacing: 25) {
                         let months = createYear(startDate: ratings.last?.date ?? Date())
-                        let startYear = Calendar.current.dateComponents([.year], from: months.first!).year!
-                        let endYear = Calendar.current.dateComponents([.year], from: months.last!).year!
-                        let areYearsSame = startYear == endYear
-                        
-                        let startMonthTitle = areYearsSame
-                        ? months.first!.formatted(.dateTime.month())
-                        : months.first!.formatted(.dateTime.month().year())
-                        
-                        let endMonthTitle = areYearsSame
-                        ? months.last!.formatted(.dateTime.month())
-                        : months.last!.formatted(.dateTime.month().year())
-                        
-                        Text("\(startMonthTitle) – \(endMonthTitle)")
+                        Text(createTitleText(months: months))
                             .font(.title3)
                             .bold()
                             .listRowSeparator(.hidden)
                         
                         let buckets = ratings.bucketByMonth
-                        let values: [(Date, Double)] = months
+                        let chartValues = months
                             .compactMap({ month in
-                                if buckets[month] != nil {
-                                    let monthValues = ratings.map({ Double(Rating.Value.allCases.firstIndex(of: $0.value)!) })
-                                    let average = monthValues.reduce(0, +) / Double(monthValues.count)
-                                    return (month, average)
-                                } else {
-                                    return nil
-                                }
+                                buckets[month].map({ monthRatings in
+                                    (month: month, average: monthRatings.average)
+                                })
                             })
                         
-                        YearChart(values: values, months: months)
+                        YearChart(values: chartValues, months: months)
                             .frame(height: 150)
                     }
                     .listRowSeparator(.hidden)
@@ -93,7 +77,7 @@ struct ResultsView: View {
 }
 
 private struct YearChart: View {
-    let values: [(Date, Double)]
+    let values: [(month: Date, average: Double)]
     let months: [Date]
     
     var body: some View {
@@ -169,11 +153,34 @@ private func createYear(startDate: Date) -> [Date] {
     }
 }
 
+private func createTitleText(months: [Date]) -> String {
+    let startYear = Calendar.current.dateComponents([.year], from: months.first!).year!
+    let endYear = Calendar.current.dateComponents([.year], from: months.last!).year!
+    let areYearsSame = startYear == endYear
+    
+    let startMonthTitle = areYearsSame
+    ? months.first!.formatted(.dateTime.month())
+    : months.first!.formatted(.dateTime.month().year())
+    
+    let endMonthTitle = areYearsSame
+    ? months.last!.formatted(.dateTime.month())
+    : months.last!.formatted(.dateTime.month().year())
+    
+    return "\(startMonthTitle) – \(endMonthTitle)"
+}
+
 private extension Array where Element == Rating {
     var groupedByMonth: [[Rating]] {
         self.bucketByMonth
             .values
             .sorted(by: { $0.first!.date > $1.first!.date })
             .map({ $0.reversed() })
+    }
+}
+
+private extension Array where Element == Rating {
+    var average: Double {
+        let values = self.map({ Double(Rating.Value.allCases.firstIndex(of: $0.value)!) })
+        return values.reduce(0, +) / Double(values.count)
     }
 }
