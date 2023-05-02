@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct daycheckApp: App {
+struct DaycheckApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     var body: some Scene {

@@ -17,7 +17,7 @@ struct ResultsView: View {
             List {
                 Section {
                     VStack(alignment: .leading, spacing: 25) {
-                        let months = createYear(startDate: ratings.last?.date ?? Date())
+                        let months = createYear(startDate: ratings.first?.date ?? Date())
                         Text(createTitleText(months: months))
                             .font(.title3)
                             .bold()
