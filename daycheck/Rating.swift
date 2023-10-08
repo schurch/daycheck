@@ -21,7 +21,7 @@ struct Rating: Identifiable {
     
     let id = UUID()
     let date: Date
-    let value: Value
+    var value: Value
     let notes: String?
 }
 

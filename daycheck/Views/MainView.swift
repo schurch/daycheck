@@ -8,33 +8,23 @@
 import SwiftUI
 
 struct MainView: View {
-    @State private var selectedValue: Rating.Value?
     @State private var showingNotificatonOptions = false
     @State private var showingEnableNotification = false
     @State private var showingResults = false
     @State private var notificationButtonTitle: LocalizedStringKey = "Loading..."
     @State private var notificationState: NotificationState = .unknown
+    @State private var ratingToday: Rating? = DataStore.getRating(forDate: Date())
     
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.openURL) private var openURL
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 Spacer()
                 
-                VStack(alignment: .leading, spacing: 30) {
-                    Text("How are you symptoms today?")
-                        .font(.title)
-                        .bold()
-                    
-                    VStack(spacing: 10) {
-                        ForEach(Rating.Value.allCases) { value in
-                            FeelingButton(value: value, selected: $selectedValue)
-                        }
-                    }
-                }
-                .frame(maxWidth: 280)
+                RatingView(rating: ratingToday)
+                    .id(UUID())
                 
                 Spacer()
                 
@@ -77,8 +67,9 @@ struct MainView: View {
             }
         }
         .sheet(isPresented: $showingEnableNotification) {
+            let defaultTime = Calendar.current.date(bySettingHour: 20, minute: 0, second: 0, of: Date())!
             EnableNotificationsView(
-                notificationTime: notificationState.notificationTime ?? Date(),
+                notificationTime: notificationState.notificationTime ?? defaultTime,
                 showingEnableNotification: $showingEnableNotification,
                 notificationState: $notificationState
             )
@@ -87,9 +78,8 @@ struct MainView: View {
         .sheet(isPresented: $showingResults) {
             ResultsView(showingResults: $showingResults)
         }
-        .onChange(of: selectedValue) { newValue in
-            guard let newValue else { return }
-            DataStore.save(rating: Rating(date: Date(), value: newValue, notes: nil))
+        .onChange(of: showingResults) { _ in
+            ratingToday = DataStore.getRating(forDate: Date())
         }
         .onChange(of: notificationState) { newValue in
             switch newValue {
@@ -104,14 +94,14 @@ struct MainView: View {
             }
         }
         .onAppear {
-            selectedValue = DataStore.getRating(forDate: Date())?.value
+            ratingToday = DataStore.getRating(forDate: Date())
             Task {
                 notificationState = await NotificationHandler.getNotificationStatus()
             }
         }
         .onChange(of: scenePhase) { newPhase in
             if newPhase == .active {
-                selectedValue = DataStore.getRating(forDate: Date())?.value
+                ratingToday = DataStore.getRating(forDate: Date())
                 Task {
                     notificationState = await NotificationHandler.getNotificationStatus()
                 }

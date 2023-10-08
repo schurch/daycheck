@@ -13,7 +13,7 @@ struct ResultsView: View {
     private let ratings = DataStore.getRatings()
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 Section {
                     VStack(alignment: .leading, spacing: 25) {
@@ -48,19 +48,22 @@ struct ResultsView: View {
                 ForEach(ratings.groupedByMonth, id: \.first!.id) { group in
                     Section(group.first!.date.formatted(.dateTime.month(.wide))) {
                         ForEach(group) { rating in
-                            HStack {
-                                Text(rating.date.formatted(.dateTime.weekday(.wide).day().month()))
-                                Spacer()
-                                Text(rating.value.rawValue)
-                                Rectangle()
-                                    .fill(rating.value.color)
-                                    .frame(width: 5)
+                            NavigationLink {
+                                RatingView(rating: rating)
+                            } label: {
+                                HStack {
+                                    Circle()
+                                        .fill(rating.value.color)
+                                        .frame(width: 10)
+                                    Text(rating.date.formatted(.dateTime.weekday(.wide).day().month()))
+                                    Spacer()
+                                    Text(rating.value.rawValue)
+                                }
                             }
+                            .alignmentGuide(.listRowSeparatorLeading) { _ in 0 }
                         }
                     }
                 }
-                .listRowInsets(EdgeInsets())
-                .padding(.leading, 20)
             }
             .listStyle(.plain)
             .navigationTitle("Overview")
