@@ -24,7 +24,7 @@ class DataStore {
         var insertStatement: OpaquePointer?
         
         if sqlite3_prepare_v2(db, "INSERT OR REPLACE INTO ratings (date, rating, notes) VALUES (?, ?, ?);", -1, &insertStatement, nil) == SQLITE_OK {
-            let date = rating.date.toString().cString(using: String.Encoding.utf8)
+            let date = rating.date.toISOString().cString(using: String.Encoding.utf8)
             sqlite3_bind_text(insertStatement, 1, date, -1, nil)
             
             let ratingValue = value.rawValue.cString(using: String.Encoding.utf8)
@@ -86,7 +86,7 @@ class DataStore {
         
         var queryStatement: OpaquePointer?
         if sqlite3_prepare_v2(db, "SELECT date, rating, notes FROM ratings WHERE date = ?;", -1, &queryStatement, nil) == SQLITE_OK {
-            let date = queryDate.toString().cString(using: String.Encoding.utf8)
+            let date = queryDate.toISOString().cString(using: String.Encoding.utf8)
             sqlite3_bind_text(queryStatement, 1, date, -1, nil)
                         
             if sqlite3_step(queryStatement) == SQLITE_ROW {
@@ -150,8 +150,8 @@ class DataStore {
     }
 }
 
-private extension Date {
-    func toString() -> String {
+extension Date {
+    func toISOString() -> String {
         self.formatted(
             Date.ISO8601FormatStyle(timeZone: Calendar.current.timeZone)
                 .year()

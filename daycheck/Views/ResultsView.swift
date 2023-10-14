@@ -68,6 +68,14 @@ struct ResultsView: View {
             .listStyle(.plain)
             .navigationTitle("Overview")
             .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    let header = "date,rating,notes\n"
+                    let rows = DataStore
+                        .getRatings()
+                        .map { "\($0.date.toISOString()),\($0.value?.rawValue ?? ""),\($0.notes ?? "")" }
+                        .joined(separator: "\n")
+                    ShareLink(item: header + rows)
+                }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") {
                         showingResults = false
