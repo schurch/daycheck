@@ -10,20 +10,20 @@ import Charts
 
 struct ResultsView: View {
     @Binding var showingResults: Bool
-    private let ratings = DataStore.getRatings()
+    @EnvironmentObject var model: Model
     
     var body: some View {
         NavigationStack {
             List {
                 Section {
                     VStack(alignment: .leading, spacing: 25) {
-                        let months = createYear(startDate: ratings.first?.date ?? Date())
+                        let months = createYear(startDate: model.ratings.first?.date ?? Date())
                         Text(createTitleText(months: months))
                             .font(.title3)
                             .bold()
                             .listRowSeparator(.hidden)
                         
-                        let buckets = ratings.bucketByMonth
+                        let buckets = model.ratings.bucketByMonth
                         let chartValues = months
                             .compactMap({ month in
                                 buckets[month].map({ monthRatings in
@@ -45,19 +45,19 @@ struct ResultsView: View {
                         .listRowSeparator(.hidden)
                 }
                 
-                ForEach(ratings.groupedByMonth, id: \.first!.id) { group in
+                ForEach(model.groupedRatings, id: \.first!.id) { $group in
                     Section(group.first!.date.formatted(.dateTime.month(.wide))) {
-                        ForEach(group) { rating in
+                        ForEach($group) { $rating in
                             NavigationLink {
-                                RatingView(rating: rating)
+                                RatingView(rating: $rating)
                             } label: {
                                 HStack {
                                     Circle()
-                                        .fill(rating.value.color)
+                                        .fill(rating.value?.color ?? Color.gray)
                                         .frame(width: 10)
                                     Text(rating.date.formatted(.dateTime.weekday(.wide).day().month()))
                                     Spacer()
-                                    Text(rating.value.rawValue)
+                                    Text(rating.value?.rawValue ?? "")
                                 }
                             }
                             .alignmentGuide(.listRowSeparatorLeading) { _ in 0 }
@@ -74,8 +74,8 @@ struct ResultsView: View {
                     }
                 }
             }
-            .accentColor(.accent)
         }
+        .accentColor(.accent)
     }
 }
 
@@ -173,17 +173,8 @@ private func createTitleText(months: [Date]) -> String {
 }
 
 private extension Array where Element == Rating {
-    var groupedByMonth: [[Rating]] {
-        self.bucketByMonth
-            .values
-            .sorted(by: { $0.first!.date > $1.first!.date })
-            .map({ $0.reversed() })
-    }
-}
-
-private extension Array where Element == Rating {
     var average: Double {
-        let values = self.map({ Double(Rating.Value.allCases.firstIndex(of: $0.value)!) })
+        let values = self.compactMap { $0.value }.map { Double(Rating.Value.allCases.firstIndex(of: $0)!) }
         return values.reduce(0, +) / Double(values.count)
     }
 }

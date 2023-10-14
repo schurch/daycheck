@@ -14,6 +14,7 @@ struct DaycheckApp: App {
     var body: some Scene {
         WindowGroup {
             MainView()
+                .environmentObject(Model())
         }
     }
 }

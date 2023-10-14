@@ -13,7 +13,7 @@ struct MainView: View {
     @State private var showingResults = false
     @State private var notificationButtonTitle: LocalizedStringKey = "Loading..."
     @State private var notificationState: NotificationState = .unknown
-    @State private var ratingToday: Rating? = DataStore.getRating(forDate: Date())
+    @EnvironmentObject var model: Model
     
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.openURL) private var openURL
@@ -23,8 +23,7 @@ struct MainView: View {
             VStack {
                 Spacer()
                 
-                RatingView(rating: ratingToday)
-                    .id(UUID())
+                RatingView(rating: model.ratingToday)
                 
                 Spacer()
                 
@@ -78,9 +77,6 @@ struct MainView: View {
         .sheet(isPresented: $showingResults) {
             ResultsView(showingResults: $showingResults)
         }
-        .onChange(of: showingResults) { _ in
-            ratingToday = DataStore.getRating(forDate: Date())
-        }
         .onChange(of: notificationState) { newValue in
             switch newValue {
             case .enabled(hour: let hour, minute: let minute):
@@ -94,76 +90,17 @@ struct MainView: View {
             }
         }
         .onAppear {
-            ratingToday = DataStore.getRating(forDate: Date())
             Task {
                 notificationState = await NotificationHandler.getNotificationStatus()
             }
         }
         .onChange(of: scenePhase) { newPhase in
             if newPhase == .active {
-                ratingToday = DataStore.getRating(forDate: Date())
                 Task {
                     notificationState = await NotificationHandler.getNotificationStatus()
                 }
             }
         }
-    }
-    
-}
-
-private struct FeelingButton: View {
-    let value: Rating.Value
-    @Binding var selected: Rating.Value?
-    @ScaledMetric private var imageSize = 22
-    
-    var body: some View {
-        Button {
-            selected = value
-        } label: {
-            Label {
-                Text(value.rawValue)
-            } icon: {
-                Image("tick")
-                    .resizable()
-                    .frame(width: imageSize, height: imageSize)
-            }
-            .labelStyle(LeadingTitleStyle(showIcon: selected == value))
-        }
-        .buttonStyle(
-            MainButtonStyle(
-                selected: value == selected,
-                color: value.color
-            )
-        )
-    }
-}
-
-private struct MainButtonStyle: ButtonStyle {
-    let selected: Bool
-    let color: Color
-    
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .frame(minHeight: 60)
-            .foregroundColor(selected ? .white : .black)
-            .background(selected ? color : .defaultButton)
-            .cornerRadius(15)
-    }
-}
-
-private struct LeadingTitleStyle: LabelStyle {
-    let showIcon: Bool
-    
-    func makeBody(configuration: Configuration) -> some View {
-        HStack(alignment: .center) {
-            configuration.title
-                .bold()
-            Spacer()
-            if showIcon {
-                configuration.icon
-            }
-        }
-        .padding()
     }
 }
 

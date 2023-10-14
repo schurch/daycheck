@@ -15,6 +15,7 @@ class DataStore {
     }()
     
     static func save(rating: Rating) {
+        guard let value = rating.value else { return }
         guard let db = openConnection() else { return }
         defer { closeConnection(db: db) }
         
@@ -26,7 +27,7 @@ class DataStore {
             let date = rating.date.toString().cString(using: String.Encoding.utf8)
             sqlite3_bind_text(insertStatement, 1, date, -1, nil)
             
-            let ratingValue = rating.value.rawValue.cString(using: String.Encoding.utf8)
+            let ratingValue = value.rawValue.cString(using: String.Encoding.utf8)
             sqlite3_bind_text(insertStatement, 2, ratingValue, -1, nil)
             
             let notes = rating.notes.flatMap { $0.cString(using: String.Encoding.utf8) }

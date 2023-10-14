@@ -8,42 +8,38 @@
 import SwiftUI
 
 struct RatingView: View {
-    private var rating: Rating?
-    
-    @State private var selectedValue: Rating.Value?
-    
-    init(rating: Rating?) {
-        _selectedValue = State(initialValue: rating?.value)
-    }
+    @Binding var rating: Rating
     
     var body: some View {
         VStack(alignment: .leading, spacing: 30) {
-            Text("How are you symptoms today?")
-                .font(.title)
-                .bold()
+            Group {
+                if Calendar.current.isDateInToday(rating.date) {
+                    Text("How are you symptoms today?")
+                } else {
+                    Text("How were your symptoms on \(rating.date.formatted(date: .abbreviated, time: .omitted))?")
+                }
+            }
+            .font(.title)
+            .bold()
             
             VStack(spacing: 10) {
                 ForEach(Rating.Value.allCases) { value in
-                    FeelingButton(value: value, selectedValue: $selectedValue)
+                    FeelingButton(value: value, rating: $rating)
                 }
             }
         }
         .frame(maxWidth: 280)
-        .onChange(of: selectedValue) { newValue in
-            guard let newValue else { return }
-            DataStore.save(rating: Rating(date: rating?.date ?? Date(), value: newValue, notes: nil))
-        }
     }
 }
 
 private struct FeelingButton: View {
     let value: Rating.Value
-    @Binding var selectedValue: Rating.Value?
+    @Binding var rating: Rating
     @ScaledMetric private var imageSize = 22
     
     var body: some View {
         Button {
-            selectedValue = value
+            rating.value = value
         } label: {
             Label {
                 Text(value.rawValue)
@@ -52,10 +48,10 @@ private struct FeelingButton: View {
                     .resizable()
                     .frame(width: imageSize, height: imageSize)
             }
-            .labelStyle(LeadingTitleStyle(showIcon: selectedValue == value))
+            .labelStyle(LeadingTitleStyle(showIcon: rating.value == value))
         }
         .buttonStyle(
-            MainButtonStyle(selected: selectedValue == value, color: value.color)
+            MainButtonStyle(selected: rating.value == value, color: value.color)
         )
     }
 }
@@ -89,8 +85,8 @@ private struct LeadingTitleStyle: LabelStyle {
     }
 }
 
-//struct RatingView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        RatingView(rating: Rating(date: Date(), value: .moderate, notes: nil))
-//    }
-//}
+struct RatingView_Previews: PreviewProvider {
+    static var previews: some View {
+        RatingView(rating: .constant(Rating(date: Date(), value: .moderate, notes: nil)))
+    }
+}
