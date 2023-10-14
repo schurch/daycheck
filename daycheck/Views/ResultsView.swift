@@ -36,6 +36,29 @@ struct ResultsView: View {
                         
                         YearChart(values: chartValues, months: months)
                             .frame(height: 150)
+                        
+                        HStack {
+                            Spacer()
+                            Chart(model.ratings.valueTotals, id: \.0) { value, total in
+                                SectorMark(
+                                    angle: .value("Total", total),
+                                    innerRadius: .ratio(0.5),
+                                    outerRadius: .inset(10),
+                                    angularInset: 0
+                                )
+                                .foregroundStyle(by: .value("Rating value", value.rawValue))
+                            }
+                            .chartForegroundStyleScale([
+                                Rating.Value.notPresent.rawValue: Color.notPresent,
+                                Rating.Value.present.rawValue: Color.notPresent,
+                                Rating.Value.mild.rawValue: Color.mild,
+                                Rating.Value.moderate.rawValue: Color.moderate,
+                                Rating.Value.severe.rawValue: Color.severe
+                            ])
+                            .chartLegend(position: .trailing, alignment: .center)
+                            .frame(height: 250)
+                            Spacer()
+                        }
                     }
                     .listRowSeparator(.hidden)
                     .padding(.bottom, 20)

@@ -46,4 +46,27 @@ extension Array where Element == Rating {
                 buckets[bucket] = (buckets[bucket] ?? []) + [rating]
             }
     }
+    
+    var valueTotals: [(Rating.Value, Int)] {
+        let initial: [Rating.Value: Int] = [
+            .notPresent: 0,
+            .present: 0,
+            .mild: 0,
+            .moderate: 0,
+            .severe: 0
+        ]
+        
+        let totals = self.reduce(into: initial) { totals, rating in
+            guard let value = rating.value else { return }
+            totals[value]! += 1
+        }
+        
+        return [
+            (.notPresent, totals[.notPresent]!),
+            (.present, totals[.present]!),
+            (.mild, totals[.mild]!),
+            (.moderate, totals[.moderate]!),
+            (.severe, totals[.severe]!)
+        ]
+    }
 }
