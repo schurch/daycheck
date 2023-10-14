@@ -104,7 +104,6 @@ struct ResultsView: View {
                         }
                     }, label: {
                         Image(systemName: "ellipsis.circle")
-                            .font(.system(size: 21))
                     })
                 }
                 ToolbarItem(placement: .confirmationAction) {
