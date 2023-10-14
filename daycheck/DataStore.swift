@@ -60,7 +60,7 @@ class DataStore {
                 
                 ratings.append(
                     Rating(
-                        date: dateString.toDate(),
+                        date: dateString.toISODate(),
                         value: Rating.Value(rawValue: ratingValue)!,
                         notes: notes
                     )
@@ -95,7 +95,7 @@ class DataStore {
                 let notes = sqlite3_column_text(queryStatement, 2).map { String(cString: $0) }
                 
                 rating = Rating(
-                    date: dateString.toDate(),
+                    date: dateString.toISODate(),
                     value: Rating.Value(rawValue: ratingValue)!,
                     notes: notes
                 )
@@ -161,8 +161,8 @@ extension Date {
     }
 }
 
-private extension String {
-    func toDate() -> Date {
+extension String {
+    func toISODate() -> Date {
         let dateFormatter = ISO8601DateFormatter()
         dateFormatter.timeZone = Calendar.current.timeZone
         dateFormatter.formatOptions = [.withFullDate]

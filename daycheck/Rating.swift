@@ -8,9 +8,9 @@
 import Foundation
 import SwiftUI
 
-struct Rating: Identifiable {
-    enum Value: String, CaseIterable, Identifiable {
-        var id: Self { self }
+public struct Rating: Identifiable {
+    public enum Value: String, CaseIterable, Identifiable {
+        public var id: Self { self }
         
         case notPresent = "Not present"
         case present = "Present"
@@ -19,10 +19,10 @@ struct Rating: Identifiable {
         case severe = "Severe"
     }
     
-    let id = UUID()
-    let date: Date
-    var value: Value?
-    let notes: String?
+    public var id: String { date.toISOString() } 
+    public let date: Date
+    public var value: Value?
+    public let notes: String?
 }
 
 extension Rating.Value {

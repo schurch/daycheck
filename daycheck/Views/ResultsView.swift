@@ -7,8 +7,11 @@
 
 import SwiftUI
 import Charts
+import UniformTypeIdentifiers
 
 struct ResultsView: View {
+    @State private var showingExporter = false
+    @State private var showingImporter = false
     @Binding var showingResults: Bool
     @EnvironmentObject var model: Model
     
@@ -68,13 +71,18 @@ struct ResultsView: View {
             .listStyle(.plain)
             .navigationTitle("Overview")
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    let header = "date,rating,notes\n"
-                    let rows = DataStore
-                        .getRatings()
-                        .map { "\($0.date.toISOString()),\($0.value?.rawValue ?? ""),\($0.notes ?? "")" }
-                        .joined(separator: "\n")
-                    ShareLink(item: header + rows)
+                ToolbarItem(placement: .topBarTrailing) {
+                    Menu(content: {
+                        Button("Export") {
+                            showingExporter = true
+                        }
+                        Button("Import") {
+                            showingImporter = true
+                        }
+                    }, label: {
+                        Image(systemName: "ellipsis.circle")
+                            .font(.system(size: 21))
+                    })
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") {
@@ -83,6 +91,44 @@ struct ResultsView: View {
                 }
             }
         }
+        .fileExporter(
+            isPresented: $showingExporter,
+            document: DataStore.getRatings(),
+            contentType: .commaSeparatedText,
+            defaultFilename: "daycheck.csv",
+            onCompletion: { _ in }
+        )
+        .fileImporter(
+            isPresented: $showingImporter,
+            allowedContentTypes: [.commaSeparatedText],
+            onCompletion: { result in
+                switch result {
+                case .success(let file):
+                    let gotAccess = file.startAccessingSecurityScopedResource()
+                    if !gotAccess { return }
+                    let contents = try! String(contentsOf: file)
+                    let lines = contents.split(separator: "\n")
+                    let ratings = lines.dropFirst().map { line in
+                        let parts = line.split(separator: ",")
+                        return Rating(
+                            date: String(parts[0]).toISODate(),
+                            value: Rating.Value(rawValue: String(parts[1])),
+                            notes: nil
+                        )
+                    }
+                    
+                    for rating in ratings {
+                        DataStore.save(rating: rating)
+                    }
+                    
+                    model.ratings = ratings
+                    
+                    file.stopAccessingSecurityScopedResource()
+                case .failure:
+                    print("ERROR")
+                }
+            }
+        )
         .accentColor(.accent)
     }
 }
@@ -146,6 +192,61 @@ private struct YearChart: View {
                     format: .dateTime.month(.narrow),
                     anchor: .top
                 )
+            }
+        }
+    }
+}
+
+extension Array<Rating>: FileDocument {
+    public static var readableContentTypes = [UTType.commaSeparatedText]
+    
+    public init(configuration: ReadConfiguration) throws {
+        guard let data = configuration.file.regularFileContents else {
+            self.init()
+            return
+        }
+        
+        let lines = String(data: data, encoding: .utf8)!.split(separator: "\n")
+        let ratings = lines.dropFirst().map { line in
+            let parts = line.split(separator: ",")
+            return Rating(
+                date: String(parts[0]).toISODate(),
+                value: Rating.Value(rawValue: String(parts[1])),
+                notes: String(parts[2])
+            )
+            
+        }
+        self.init(ratings)
+    }
+    
+    public func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
+        let header = "date,rating,notes\n"
+        let rows = self
+            .map { "\($0.date.toISOString()),\($0.value?.rawValue ?? ""),\($0.notes ?? "")" }
+            .joined(separator: "\n")
+        return FileWrapper(regularFileWithContents: (header + rows).data(using: .utf8)!)
+    }
+}
+
+extension Array<Rating>: Transferable {
+    public static var transferRepresentation: some TransferRepresentation {
+        DataRepresentation(contentType: .commaSeparatedText) { ratings in
+            let header = "date,rating,notes\n"
+            let rows = ratings
+                .map { "\($0.date.toISOString()),\($0.value?.rawValue ?? ""),\($0.notes ?? "")" }
+                .joined(separator: "\n")
+            
+            return (header + rows).data(using: .utf8)!
+        } importing: { data in
+            let lines = String(data: data, encoding: .utf8)!.split(separator: "\n")
+            return lines.dropFirst().map { line in
+                let parts = line.split(separator: ",")
+                return Rating(
+                    date: String(parts[0]).toISODate(),
+                    value: Rating.Value(rawValue: String(parts[1])),
+                    notes: String(parts[2])
+                )
+                
             }
         }
     }

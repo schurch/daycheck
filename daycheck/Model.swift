@@ -18,9 +18,8 @@ class Model: ObservableObject {
                 self.ratings.first(where: { Calendar.current.isDateInToday($0.date) }) ?? Rating(date: Date(), notes: nil)
             },
             set: { newRating in
-                self.ratings.removeAll(where: { Calendar.current.isDateInToday($0.date) })
-                self.ratings.append(newRating)
                 DataStore.save(rating: newRating)
+                self.ratings = DataStore.getRatings()
             }
         )
     }
@@ -40,8 +39,7 @@ class Model: ObservableObject {
                     DataStore.save(rating: rating)
                 }
                 
-                self.ratings = newRatings.flatMap { $0 }
-                
+                self.ratings = DataStore.getRatings()
             }
         )
     }
