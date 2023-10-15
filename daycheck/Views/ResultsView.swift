@@ -9,12 +9,6 @@ import SwiftUI
 import Charts
 import UniformTypeIdentifiers
 
-struct ToyShape: Identifiable {
-    var type: String
-    var count: Double
-    var id = UUID()
-}
-
 struct ResultsView: View {
     @State private var showingExporter = false
     @State private var showingImporter = false
@@ -25,7 +19,7 @@ struct ResultsView: View {
         NavigationStack {
             List {
                 Section {
-                    VStack(alignment: .leading, spacing: 25) {
+                    VStack(alignment: .leading, spacing: 30) {
                         let months = createYear(startDate: model.ratings.first?.date ?? Date())
                         Text(createTitleText(months: months))
                             .font(.title3)
@@ -66,26 +60,16 @@ struct ResultsView: View {
                             Spacer()
                         }
 
-                        let data: [ToyShape] = [
-                            .init(type: "Mon", count: 0.2),
-                            .init(type: "Tue", count: 1.2),
-                            .init(type: "Wed", count: 2.2),
-                            .init(type: "Thu", count: 2.3),
-                            .init(type: "Fri", count: 3.1),
-                            .init(type: "Sat", count: 1.1),
-                            .init(type: "Sun", count: 2.3)
-                        ]
-
-                        
                         Chart {
-                            ForEach(data) { shape in
+                            ForEach(model.ratings.weeklyAverages, id: \.0) { day, average in
                                 BarMark(
-                                    x: .value("Day of week", shape.type),
-                                    y: .value("Average rating", shape.count)
+                                    x: .value("Day of week", day),
+                                    y: .value("Average rating", average)
                                 )
                             }
                         }
                         .foregroundStyle(Color.graph)
+                        .chartYScale(domain: [0, Rating.Value.allCases.count - 1])
                         .chartYAxis {
                             AxisMarks(
                                 position: .leading,
@@ -340,11 +324,4 @@ private func createTitleText(months: [Date]) -> String {
     : months.last!.formatted(.dateTime.month().year())
     
     return "\(startMonthTitle) – \(endMonthTitle)"
-}
-
-private extension Array where Element == Rating {
-    var average: Double {
-        let values = self.compactMap { $0.value }.map { Double(Rating.Value.allCases.firstIndex(of: $0)!) }
-        return values.reduce(0, +) / Double(values.count)
-    }
 }
