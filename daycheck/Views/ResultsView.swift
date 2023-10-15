@@ -9,6 +9,12 @@ import SwiftUI
 import Charts
 import UniformTypeIdentifiers
 
+struct ToyShape: Identifiable {
+    var type: String
+    var count: Double
+    var id = UUID()
+}
+
 struct ResultsView: View {
     @State private var showingExporter = false
     @State private var showingImporter = false
@@ -59,6 +65,39 @@ struct ResultsView: View {
                             .frame(height: 250)
                             Spacer()
                         }
+
+                        let data: [ToyShape] = [
+                            .init(type: "Mon", count: 0.2),
+                            .init(type: "Tue", count: 1.2),
+                            .init(type: "Wed", count: 2.2),
+                            .init(type: "Thu", count: 2.3),
+                            .init(type: "Fri", count: 3.1),
+                            .init(type: "Sat", count: 1.1),
+                            .init(type: "Sun", count: 2.3)
+                        ]
+
+                        
+                        Chart {
+                            ForEach(data) { shape in
+                                BarMark(
+                                    x: .value("Day of week", shape.type),
+                                    y: .value("Average rating", shape.count)
+                                )
+                            }
+                        }
+                        .foregroundStyle(Color.graph)
+                        .chartYAxis {
+                            AxisMarks(
+                                position: .leading,
+                                values: .automatic(desiredCount: 5)
+                            ) { value in
+                                let rating = Rating.Value.allCases[value.as(Int.self)!]
+                                AxisValueLabel {
+                                    Text(rating.rawValue)
+                                }
+                            }
+                        }
+                        .frame(height: 150)
                     }
                     .listRowSeparator(.hidden)
                     .padding(.bottom, 20)
